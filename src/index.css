@@ -1,6 +1,4 @@
-/* Tailwind base directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* custom styles can go here */
+/* custom styles */

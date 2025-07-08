@@ -1,8 +1,5 @@
-import React from 'react';
 import TimeTracker from './components/TimeTracker';
 
-const App: React.FC = () => {
+export default function App() {
   return <TimeTracker />;
-};
-
-export default App;
+}
