@@ -7,8 +7,13 @@
     <meta name="theme-color" content="#000000" />
     <title>RBTCA Time Tracker</title>
 
-    <!-- TailwindCSS injected at runtime -->
+    <!-- Tailwind injected at runtime -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Force consistent font & remove default margins -->
+    <style>
+      body { @apply font-sans m-0; }  /* Tailwind parses this thanks to the CDN script */
+    </style>
   </head>
   <body class="bg-gray-100">
     <noscript>You need to enable JavaScript to run this app.</noscript>
