@@ -1,15 +1,15 @@
 # RBTCA Time Tracker
 
-This is a simple React + TypeScript project containing the `TimeTracker` component.
+React + TypeScript single–page app.
 
-## Quick Start
-
+## Local dev
 ```bash
-# Install dependencies
 npm install
-
-# Start development server
 npm start
 ```
 
-You can build and deploy or push to GitHub as you would any React project.
+## Production build
+```bash
+npm run build
+```
+Push to GitHub → Netlify picks it up automatically.
