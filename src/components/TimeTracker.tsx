@@ -20,13 +20,13 @@ const TimeTracker = () => {
     { value: 'downtime', label: 'Downtime/Waiting', color: 'bg-gray-100 text-gray-800' }
   ];
 
-  const calculateDuration = (start, end) => {
-    if (!start || !end) return 0;
-    const startTime = new Date(`2000-01-01T${start}`);
-    const endTime = new Date(`2000-01-01T${end}`);
-    const diff = (endTime - startTime) / (1000 * 60); // minutes
-    return Math.max(0, diff);
-  };
+const calculateDuration = (start: string, end: string): number => {
+  if (!start || !end) return 0;
+  const startTime = new Date(`2000-01-01T${start}`);
+  const endTime   = new Date(`2000-01-01T${end}`);
+  return (endTime.getTime() - startTime.getTime()) / 1000 / 60; // minutes
+};
+
 
   const addEntry = () => {
     if (!currentEntry.startTime || !currentEntry.endTime || !currentEntry.category) {
