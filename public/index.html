@@ -2,16 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
     <title>RBTCA Time Tracker</title>
-    <!-- TailwindCSS CDN -->
-<link
-  href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css"
-  rel="stylesheet"
-/>
 
+    <!-- TailwindCSS (runtime CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Optional: your extra helpers -->
+    <style>
+      .input {
+        @apply w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400;
+      }
+      .label {
+        @apply text-xs font-medium text-gray-600 mb-1 block;
+      }
+      .btn-primary {
+        @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50;
+      }
+    </style>
   </head>
   <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
 </html>
