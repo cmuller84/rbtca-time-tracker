@@ -7,23 +7,10 @@
     <meta name="theme-color" content="#000000" />
     <title>RBTCA Time Tracker</title>
 
-    <!-- TailwindCSS (runtime CDN) -->
+    <!-- TailwindCSS injected at runtime -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Optional: your extra helpers -->
-    <style>
-      .input {
-        @apply w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400;
-      }
-      .label {
-        @apply text-xs font-medium text-gray-600 mb-1 block;
-      }
-      .btn-primary {
-        @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50;
-      }
-    </style>
   </head>
-  <body>
+  <body class="bg-gray-100">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
