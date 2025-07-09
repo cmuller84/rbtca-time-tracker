@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Clock, FileDown, Info } from 'lucide-react';
 
-/* ------------------- Types ------------------- */
+/* ---------- Types ---------- */
 interface TimeEntry {
   id: number;
   startTime: string;
   endTime: string;
-  duration: number;      // minutes
+  duration: number;
   category: string;
   client: string;
   description: string;
 }
 
-/* ----------------- Helpers ------------------- */
+/* ---------- Helpers ---------- */
 const minsBetween = (s: string, e: string) =>
   !s || !e
     ? 0
@@ -21,27 +21,26 @@ const minsBetween = (s: string, e: string) =>
       60000;
 
 const downloadCSV = (rows: string[][], filename: string) => {
-  const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = filename; a.click();
+  const blob = new Blob(
+    [rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n')],
+    { type: 'text/csv;charset=utf-8;' }
+  );
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
   URL.revokeObjectURL(url);
 };
 
-/* ------------- Lists & Labels ---------------- */
-const RBTCA  = ['Yaria L.', 'Matt P.'];
-const CATS   = [
-  'Direct Billable Client Work',
-  'Clinical Floor Support (non billable)',
-  'Administrative Tasks',
-  'Downtime / Waiting for Assignment'
-];
+/* ---------- Data ---------- */
+const RBTCA = ['Yaria L.', 'Matt P.'];
+const CATS  = ['Billable – 1-1', 'Admin', 'Training', 'Meeting'];
 
-/* --------------- Component ------------------- */
+/* ---------- Component ---------- */
 const TimeTracker: React.FC = () => {
   const [rbtca, setRbtca] = useState('');
-  const [date, setDate]   = useState(new Date().toISOString().slice(0, 10));
+  const [date,  setDate ] = useState(new Date().toISOString().slice(0, 10));
 
   const [form, setForm] = useState({
     startTime: '', endTime: '', category: '', client: '', description: ''
@@ -50,7 +49,7 @@ const TimeTracker: React.FC = () => {
 
   const update =
     (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setForm(p => ({ ...p, [k]: e.target.value }));
 
   const add = () => {
@@ -62,7 +61,9 @@ const TimeTracker: React.FC = () => {
   const exportCSV = () => {
     if (!entries.length) return;
     const rows = [
-      ['RBTCA', rbtca], ['Date', date], [],
+      ['RBTCA', rbtca],
+      ['Date', date],
+      [],
       ['Start','End','Duration (min)','Category','Client','Description'],
       ...entries.map(e => [
         e.startTime, e.endTime, e.duration.toString(), e.category, e.client, e.description
@@ -71,34 +72,14 @@ const TimeTracker: React.FC = () => {
     downloadCSV(rows, `rbtca-time-tracker-${date}.csv`);
   };
 
-  /* -------------------- UI -------------------- */
   return (
     <div className="max-w-2xl mx-auto p-4">
-      {/* Definitions / Instructions */}
-      <div className="bg-white border-l-4 border-blue-500 rounded p-4 mb-6 space-y-2">
-        <h2 className="flex items-center font-semibold text-blue-700">
-          <Info size={18} className="mr-1"/> Quick Instructions
-        </h2>
-        <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-          <li>Log each work block the same day.</li>
-          <li>Choose <b>one</b> of the four categories:<br/>
-            <span className="ml-4 block">• Direct Billable Client Work</span>
-            <span className="ml-4 block">• Clinical Floor Support <i>(non billable)</i></span>
-            <span className="ml-4 block">• Administrative Tasks</span>
-            <span className="ml-4 block">• Downtime / Waiting for Assignment</span>
-          </li>
-          <li>If billable, enter the client name.</li>
-          <li>When finished for the day, click <b>Export CSV</b> and email it to Chris—daily through <b>July 18</b>.</li>
-        </ul>
-      </div>
-
-      {/* Tracker Card */}
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 space-y-6">
         <h1 className="flex items-center text-2xl font-semibold text-blue-800 gap-2">
           <Clock size={22}/> RBTCA Time Tracker
         </h1>
 
-        {/* RBTCA + Date */}
+        {/* Header info */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">RBTCA Name</label>
@@ -161,26 +142,22 @@ const TimeTracker: React.FC = () => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">
-                Client Name (if applicable)
-              </label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Client Name (if applicable)</label>
               <input
                 type="text"
-                placeholder="Client name (for billable work)"
                 className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+                placeholder="Client name for 1-1 sessions"
                 value={form.client}
                 onChange={update('client')}
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">
-                Description (optional)
-              </label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Description (optional)</label>
               <input
                 type="text"
-                placeholder="Brief description of activity"
                 className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+                placeholder="Short description of work"
                 value={form.description}
                 onChange={update('description')}
               />
@@ -196,7 +173,7 @@ const TimeTracker: React.FC = () => {
           </button>
         </div>
 
-        {/* Log + Export */}
+        {/* Log + export */}
         {entries.length > 0 && (
           <>
             <table className="w-full text-sm border-t pt-4">
@@ -228,6 +205,19 @@ const TimeTracker: React.FC = () => {
             </button>
           </>
         )}
+
+        {/* ---------- Instructions moved to bottom ---------- */}
+        <div className="bg-white border-l-4 border-blue-500 rounded p-4 mt-6 space-y-2">
+          <h4 className="flex items-center font-semibold text-blue-700">
+            <Info size={18} className="mr-1"/> Daily Process (through July 18)
+          </h4>
+          <ol className="list-decimal list-inside text-sm text-gray-700 space-y-1">
+            <li><b>Enter every work block</b> as you go—start, end, category, client (if billable), notes.</li>
+            <li>Repeat for each shift or task change the same day.</li>
+            <li>When you clock out, click <b>Export CSV</b>. A file named <i>rbtca-time-tracker-YYYY-MM-DD.csv</i> downloads.</li>
+            <li>Email that file to Chris the same day. We’ll use the data to dial in KPIs for the second RBTCA.</li>
+          </ol>
+        </div>
       </div>
     </div>
   );
