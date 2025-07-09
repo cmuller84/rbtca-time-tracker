@@ -35,7 +35,16 @@ const downloadCSV = (rows: string[][], filename: string) => {
 
 /* ---------- Data ---------- */
 const RBTCA = ['Yaria L.', 'Matt P.'];
-const CATS  = ['Billable – 1-1', 'Admin', 'Training', 'Meeting'];
+
+const CATS = [
+  'Billable – 1-1 (scheduled)',
+  'Billable – 1-1 (coverage/last-minute)',
+  'Indirect Clinical (non-billable)',
+  'Ops / Admin (non-billable)',
+  'Training / CEU',
+  'Meetings (staff / parent / IEP)',
+  'Other'
+];
 
 /* ---------- Component ---------- */
 const TimeTracker: React.FC = () => {
@@ -75,8 +84,7 @@ const TimeTracker: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 space-y-6">
-
-        {/* ---------- Logo ---------- */}
+        {/* Logo */}
         <img
           src="https://advancedabatherapy.com/wp-content/uploads/2020/11/cropped-Advanced-Behavioral-Therapy-logo-01.png"
           alt="Advanced Behavioral Therapy"
@@ -87,7 +95,7 @@ const TimeTracker: React.FC = () => {
           <Clock size={22}/> RBTCA Time Tracker
         </h1>
 
-        {/* RBTCA + Date selectors */}
+        {/* RBTCA + Date */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">RBTCA Name</label>
@@ -117,7 +125,6 @@ const TimeTracker: React.FC = () => {
           <h3 className="text-lg font-semibold">Add Time Entry</h3>
 
           <div className="grid md:grid-cols-2 gap-4">
-            {/* Start & End */}
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Start Time</label>
               <input
@@ -127,6 +134,7 @@ const TimeTracker: React.FC = () => {
                 onChange={update('startTime')}
               />
             </div>
+
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">End Time</label>
               <input
@@ -137,7 +145,6 @@ const TimeTracker: React.FC = () => {
               />
             </div>
 
-            {/* Category */}
             <div className="md:col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Category</label>
               <select
@@ -150,7 +157,6 @@ const TimeTracker: React.FC = () => {
               </select>
             </div>
 
-            {/* Client & Description */}
             <div className="md:col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Client Name (if applicable)</label>
               <input
@@ -161,6 +167,7 @@ const TimeTracker: React.FC = () => {
                 onChange={update('client')}
               />
             </div>
+
             <div className="md:col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Description (optional)</label>
               <input
@@ -215,16 +222,24 @@ const TimeTracker: React.FC = () => {
           </>
         )}
 
-        {/* Instructions at bottom */}
+        {/* Instructions bottom */}
         <div className="bg-white border-l-4 border-blue-500 rounded p-4 mt-6 space-y-2">
           <h4 className="flex items-center font-semibold text-blue-700">
             <Info size={18} className="mr-1"/> Daily Process (through July 18)
           </h4>
           <ol className="list-decimal list-inside text-sm text-gray-700 space-y-1">
             <li>Log each work block <b>as you go</b> — start, end, category, client (if billable), notes.</li>
-            <li>Once you finish for the day, click <b>Export CSV</b>.</li>
-            <li>Email the CSV to Chris the same day. Repeat daily through <b>July 18</b>.</li>
-            <li>Total time to track + send: <i>&lt;60 seconds/day</i>.</li>
+            <li>Use category definitions:<br/>
+              &nbsp;&nbsp;• <i>Billable 1-1 (scheduled)</i> – planned direct sessions<br/>
+              &nbsp;&nbsp;• <i>Billable 1-1 (coverage)</i> – last-minute fill-ins<br/>
+              &nbsp;&nbsp;• <i>Indirect Clinical</i> – programming, visuals, notes<br/>
+              &nbsp;&nbsp;• <i>Ops / Admin</i> – phone, supplies, office tasks<br/>
+              &nbsp;&nbsp;• <i>Training / CEU</i> – formal coursework/in-service<br/>
+              &nbsp;&nbsp;• <i>Meetings</i> – staff, parent, IEP<br/>
+              &nbsp;&nbsp;• <i>Other</i> – anything that doesn’t fit above
+            </li>
+            <li>At day’s end, click <b>Export CSV</b> and email the file to Chris.</li>
+            <li>Repeat daily; total time ≈ <i>&lt;60 seconds</i>.</li>
           </ol>
         </div>
       </div>
