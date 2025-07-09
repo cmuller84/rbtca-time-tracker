@@ -6,7 +6,7 @@ interface TimeEntry {
   id: number;
   startTime: string;
   endTime: string;
-  duration: number;
+  duration: number;          // minutes
   category: string;
   client: string;
   description: string;
@@ -26,7 +26,7 @@ const downloadCSV = (rows: string[][], filename: string) => {
     { type: 'text/csv;charset=utf-8;' }
   );
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a   = document.createElement('a');
   a.href = url;
   a.download = filename;
   a.click();
@@ -52,7 +52,7 @@ const TimeTracker: React.FC = () => {
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setForm(p => ({ ...p, [k]: e.target.value }));
 
-  const add = () => {
+  const addEntry = () => {
     const duration = minsBetween(form.startTime, form.endTime);
     setEntries(p => [...p, { id: Date.now(), duration, ...form }]);
     setForm({ startTime: '', endTime: '', category: '', client: '', description: '' });
@@ -75,11 +75,19 @@ const TimeTracker: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 space-y-6">
+
+        {/* ---------- Logo ---------- */}
+        <img
+          src="https://advancedabatherapy.com/wp-content/uploads/2020/11/cropped-Advanced-Behavioral-Therapy-logo-01.png"
+          alt="Advanced Behavioral Therapy"
+          className="h-10 mb-2"
+        />
+
         <h1 className="flex items-center text-2xl font-semibold text-blue-800 gap-2">
           <Clock size={22}/> RBTCA Time Tracker
         </h1>
 
-        {/* Header info */}
+        {/* RBTCA + Date selectors */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">RBTCA Name</label>
@@ -104,11 +112,12 @@ const TimeTracker: React.FC = () => {
           </div>
         </div>
 
-        {/* Entry card */}
+        {/* Entry form */}
         <div className="bg-white border rounded-xl p-6 space-y-4">
           <h3 className="text-lg font-semibold">Add Time Entry</h3>
 
           <div className="grid md:grid-cols-2 gap-4">
+            {/* Start & End */}
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Start Time</label>
               <input
@@ -118,7 +127,6 @@ const TimeTracker: React.FC = () => {
                 onChange={update('startTime')}
               />
             </div>
-
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">End Time</label>
               <input
@@ -129,6 +137,7 @@ const TimeTracker: React.FC = () => {
               />
             </div>
 
+            {/* Category */}
             <div className="md:col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Category</label>
               <select
@@ -141,23 +150,23 @@ const TimeTracker: React.FC = () => {
               </select>
             </div>
 
+            {/* Client & Description */}
             <div className="md:col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Client Name (if applicable)</label>
               <input
                 type="text"
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
                 placeholder="Client name for 1-1 sessions"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
                 value={form.client}
                 onChange={update('client')}
               />
             </div>
-
             <div className="md:col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Description (optional)</label>
               <input
                 type="text"
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
                 placeholder="Short description of work"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
                 value={form.description}
                 onChange={update('description')}
               />
@@ -167,13 +176,13 @@ const TimeTracker: React.FC = () => {
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
             disabled={!form.startTime || !form.endTime || !form.category}
-            onClick={add}
+            onClick={addEntry}
           >
             + Add Entry
           </button>
         </div>
 
-        {/* Log + export */}
+        {/* Log & Export */}
         {entries.length > 0 && (
           <>
             <table className="w-full text-sm border-t pt-4">
@@ -206,16 +215,16 @@ const TimeTracker: React.FC = () => {
           </>
         )}
 
-        {/* ---------- Instructions moved to bottom ---------- */}
+        {/* Instructions at bottom */}
         <div className="bg-white border-l-4 border-blue-500 rounded p-4 mt-6 space-y-2">
           <h4 className="flex items-center font-semibold text-blue-700">
             <Info size={18} className="mr-1"/> Daily Process (through July 18)
           </h4>
           <ol className="list-decimal list-inside text-sm text-gray-700 space-y-1">
-            <li><b>Enter every work block</b> as you go—start, end, category, client (if billable), notes.</li>
-            <li>Repeat for each shift or task change the same day.</li>
-            <li>When you clock out, click <b>Export CSV</b>. A file named <i>rbtca-time-tracker-YYYY-MM-DD.csv</i> downloads.</li>
-            <li>Email that file to Chris the same day. We’ll use the data to dial in KPIs for the second RBTCA.</li>
+            <li>Log each work block <b>as you go</b> — start, end, category, client (if billable), notes.</li>
+            <li>Once you finish for the day, click <b>Export CSV</b>.</li>
+            <li>Email the CSV to Chris the same day. Repeat daily through <b>July 18</b>.</li>
+            <li>Total time to track + send: <i>&lt;60 seconds/day</i>.</li>
           </ol>
         </div>
       </div>
